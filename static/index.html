@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Web Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .background-image {
+            background: rgba(0, 0, 0, 0.6) url('/static/pexels-tara-winstead-8386440.jpg') center/cover fixed;
+        }
+
+        header {
+            background-color: #333;
+            padding: 10px;
+        }
+
+        nav {
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+        }
+
+        nav a:hover {
+            background-color: #555;
+        }
+
+        .container {
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            font-size: 60px;
+            text-shadow: 2px 2px 4px #000;
+            color: white;
+        }
+
+        p {
+            font-size: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+        section {
+            margin: 20px 0;
+            color: white;
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .action-button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .action-button:hover {
+            background-color: #555;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            text-align: left;
+            border: none;
+            background-color: inherit;
+            cursor: pointer;
+        }
+
+        .dropdown-content button:hover {
+            background-color: #ddd;
+        }
+
+        .confusion-matrix-image {
+            margin-top: 20px;
+        }
+        .auc-result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body class="background-image">
+
+    <header>
+        <nav>
+            <a href="#">Home</a>
+            <!-- Add more navigation links as needed -->
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1>Machine Learning Algorithms</h1>
+        
+        <section>
+            <p>In this project, we are going to apply different Supervised Machine Learning Algorithms</p>
+        </section>
+
+        <div class="action-buttons">
+            <button class="action-button" onclick="loadData()">Load Data</button>
+            <button class="action-button" onclick="prepForTraining()">Prep for Training</button>
+            <button class="action-button" onclick="applyLogisticRegression()">Apply Logistic Regression</button>
+            <button class="action-button" onclick="applyDecisionTree()">Apply Decision Tree</button>
+            <button class="action-button" onclick="applyRandomForest()">Apply Random Forest</button>
+            <button class="action-button" onclick="applySVM()">Apply SVM</button>
+            <button class="action-button" onclick="applyKNeighbors()">Apply KNeighbours</button>
+            <div class="dropdown">
+                <button class="action-button" onclick="toggleConfusionMatrixDropdown()">Calculate Confusion Matrix</button>
+                <div id="confusionMatrixDropdown" class="dropdown-content">
+                    <button onclick="performConfusionMatrixCalculation('LogisticRegression')">Logistic Regression</button>
+                    <button onclick="performConfusionMatrixCalculation('DecisionTree')">Decision Tree</button>
+                    <button onclick="performConfusionMatrixCalculation('RandomForest')">Random Forest</button>
+                    <button onclick="performConfusionMatrixCalculation('SVM')">SVM</button>
+                    <button onclick="performConfusionMatrixCalculation('KNeighbors')">K-Nearest Neighbors</button>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="action-button" onclick="toggleSensitivityDropdown()">Calculate Sensitivity</button>
+                <div id="sensitivityDropdown" class="dropdown-content">
+                    <button onclick="calculateSensitivity('LogisticRegression')">Logistic Regression</button>
+                    <button onclick="calculateSensitivity('DecisionTree')">Decision Tree</button>
+                    <button onclick="calculateSensitivity('RandomForest')">Random Forest</button>
+                    <button onclick="calculateSensitivity('SVM')">SVM</button>
+                    <button onclick="calculateSensitivity('KNeighbors')">K-Nearest Neighbors</button>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="action-button" onclick="toggleSpecificityDropdown()">Calculate Specificity</button>
+                <div id="specificityDropdown" class="dropdown-content">
+                    <button onclick="calculateSpecificity('LogisticRegression')">Logistic Regression</button>
+                    <button onclick="calculateSpecificity('DecisionTree')">Decision Tree</button>
+                    <button onclick="calculateSpecificity('RandomForest')">Random Forest</button>
+                    <button onclick="calculateSpecificity('SVM')">SVM</button>
+                    <button onclick="calculateSpecificity('KNeighbors')">K-Nearest Neighbors</button>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="action-button" onclick="toggleRocDropdown()">Calculate ROC Curve</button>
+                <div id="rocDropdown" class="dropdown-content">
+                    <button onclick="performRocCalculation('LogisticRegression')">Logistic Regression</button>
+                    <button onclick="performRocCalculation('DecisionTree')">Decision Tree</button>
+                    <button onclick="performRocCalculation('RandomForest')">Random Forest</button>
+                    <button onclick="performRocCalculation('SVM')">SVM</button>
+                    <button onclick="performRocCalculation('KNeighbors')">K-Nearest Neighbors</button>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="action-button" onclick="toggleAUCDropdown()">Calculate AUC</button>
+                <div id="aucDropdown" class="dropdown-content">
+                    <button onclick="calculateAUC('LogisticRegression')">Logistic Regression</button>
+                    <button onclick="calculateAUC('DecisionTree')">Decision Tree</button>
+                    <button onclick="calculateAUC('RandomForest')">Random Forest</button>
+                    <button onclick="calculateAUC('SVM')">SVM</button>
+                    <button onclick="calculateAUC('KNeighbors')">K-Nearest Neighbors</button>
+                </div>
+            </div>
+            <button class="action-button" onclick="calculateSensitivityAtSpecificity()">Calculate Sensitivity at Specificity 0.90</button>
+        </div>
+        <div class="confusion-matrix-image" id="confusionMatrixImageContainer"></div>
+        <div class="roc-curve-image" id="rocCurveImageContainer"></div>
+    </div>
+    
+    <script>
+        async function loadData() {
+            try {
+                const response = await fetch('/load-data');
+                const result = await response.json();
+                alert(result.message);
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        async function prepForTraining() {
+            try {
+                const response = await fetch('/prep-for-training');
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert(result.message);
+                    // Optionally, you can perform additional actions after successful preparation
+                } else {
+                    alert(`Error: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error during preparation for training:', error);
+                alert(`An error occurred during preparation for training. Please check the console for more details.`);
+            }
+        }
+
+        async function applyLogisticRegression() {
+            try {
+                const response = await fetch('/perform-logistic-regression');
+                const result = await response.json();
+
+                alert(result.message);
+                console.log('Accuracy:', result.accuracy);
+            } catch (error) {
+                console.error('Error applying Logistic Regression:', error);
+                alert('An error occurred while applying Logistic Regression. Please check the console for more details.');
+            }
+        }
+
+        async function applySVM() {
+            try {
+                const response = await fetch('/perform-svm');
+                const result = await response.json();
+
+                alert(result.message);
+                console.log('SVM Accuracy:', result.accuracy);
+            } catch (error) {
+                console.error('Error applying SVM:', error);
+                alert('An error occurred while applying SVM. Please check the console for more details.');
+            }
+        }
+
+        async function applyDecisionTree() {
+            try {
+                const response = await fetch('/perform-decision-tree');
+                const result = await response.json();
+
+                alert(result.message);
+                console.log('Decision Tree Accuracy:', result.accuracy);
+            } catch (error) {
+                console.error('Error applying Decision Tree:', error);
+                alert('An error occurred while applying Decision Tree. Please check the console for more details.');
+            }
+        }
+
+        async function applyRandomForest() {
+            try {
+                const response = await fetch('/perform-random-forest');
+                const result = await response.json();
+
+                alert(result.message);
+                console.log('Random Forest Accuracy:', result.accuracy);
+            } catch (error) {
+                console.error('Error applying Random Forest:', error);
+                alert('An error occurred while applying Random Forest. Please check the console for more details.');
+            }
+        }
+        async function applyKNeighbors() {
+            try {
+                const response = await fetch('/perform-kneighbors');
+                const result = await response.json();
+
+                alert(result.message);
+                console.log('K-Nearest Neighbors Accuracy:', result.accuracy);
+            } catch (error) {
+                console.error('Error applying K-Nearest Neighbors:', error);
+                alert('An error occurred while applying K-Nearest Neighbors. Please check the console for more details.');
+            }
+        }
+
+        function toggleConfusionMatrixDropdown() {
+            var dropdown = document.getElementById("confusionMatrixDropdown");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+
+        function performConfusionMatrixCalculation(modelName) {
+            // Call your backend API with the selected model name
+            // Update this part based on how you're handling API calls in your project
+            fetch(`/confusion-matrix?model_name=${modelName}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayConfusionMatrixImage(data.image_path);
+                })
+                .catch(error => console.error('Error:', error));
+
+            // Close the dropdown after selection
+            toggleConfusionMatrixDropdown();
+        }
+
+        function displayConfusionMatrixImage(imagePath) {
+            var imageContainer = document.getElementById("confusionMatrixImageContainer");
+            imageContainer.innerHTML = `<img src="${imagePath}" class="img-fluid" alt="Confusion Matrix">`;
+        }
+
+        function toggleSensitivityDropdown() {
+            var dropdown = document.getElementById("sensitivityDropdown");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+
+        function calculateSensitivity(modelName) {
+            fetch(`/sensitivity?model_name=${modelName}`)
+                .then(response => response.text())
+                .then(data => {
+                    displaySensitivityResult(data);
+                })
+                .catch(error => console.error('Error:', error));
+
+            // Close the dropdown after selection
+            toggleSensitivityDropdown();
+        }
+
+        function displaySensitivityResult(result) {
+            // Display the result in an alert
+            alert(`Sensitivity is: ${result}`);
+        }
+
+        function toggleSpecificityDropdown() {
+            var dropdown = document.getElementById("specificityDropdown");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+
+        function calculateSpecificity(modelName) {
+            fetch(`/specificity?model_name=${modelName}`)
+                .then(response => response.text())
+                .then(data => {
+                    displaySpecificityResult(data);
+                })
+                .catch(error => console.error('Error:', error));
+
+            // Close the dropdown after selection
+            toggleSpecificityDropdown();
+        }
+
+        function displaySpecificityResult(result) {
+            // Display the result in an alert
+            alert(`Specificity: ${result}`);
+        }
+
+        function toggleRocDropdown() {
+            var dropdown = document.getElementById("rocDropdown");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+
+        function performRocCalculation(modelName) {
+            // Call your backend API with the selected model name
+            // Update this part based on how you're handling API calls in your project
+            fetch(`/calculate-ROC?model_name=${modelName}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayRocCurveImage(data.image_path);
+                })
+                .catch(error => console.error('Error:', error));
+
+            // Close the dropdown after selection
+            toggleRocDropdown();
+        }
+
+        function displayRocCurveImage(imagePath) {
+            var imageContainer = document.getElementById("rocCurveImageContainer");
+            imageContainer.innerHTML = `<img src="${imagePath}" class="img-fluid" alt="ROC Curve">`;
+        }
+
+        function toggleAUCDropdown() {
+            var dropdown = document.getElementById("aucDropdown");
+            dropdown.style.display = (dropdown.style.display === "block") ? "none" : "block";
+        }
+
+        function calculateAUC(modelName) {
+            fetch(`/calculate-AUC?model_name=${modelName}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Ensure the data is received correctly
+                    if (data && data.class_auc !== undefined && data.macro_auc !== undefined && data.micro_auc !== undefined) {
+                        displayAUCResult(data);
+                    } else {
+                        alert("Error: Invalid response format");
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+
+            // Close the dropdown after selection
+            toggleAUCDropdown();
+        }
+
+        function displayAUCResult(result) {
+            alert(`Class AUC: ${result.class_auc}\nMacro AUC: ${result.macro_auc}\nMicro AUC: ${result.micro_auc}`);
+        }
+
+        function calculateSensitivityAtSpecificity() {
+            // Implement the action for calculating Sensitivity at Specificity 0.90
+            alert('Calculate Sensitivity at Specificity 0.90 function called');
+        }
+    </script>
+</body>
+</html>
